@@ -88,14 +88,13 @@ export default class Category extends CatalogPage {
           fetch(`/api/storefront/cart/${cartId}`, {
             method: "DELETE",
             credentials: "include",
-          })
-            .then((response) => response.json())
-            .then((response) => {
-              console.log("Delete response", response);
-              if (!response) {
-                throw new Error("Unexpected delete response.");
-              }
-            });
+          }).then((response) => {
+            console.log("Delete response", response);
+            const status = response.status.toString();
+            if (status[0] !== "2") {
+              throw new Error("Unexpected delete response.");
+            }
+          });
         })
         .catch((error) => {
           console.error("Error:", error);
