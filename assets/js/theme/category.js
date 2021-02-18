@@ -92,7 +92,11 @@ export default class Category extends CatalogPage {
             console.log("Delete response", response);
             const status = response.status.toString();
             if (status[0] !== "2") {
+              alert("There was an error with emptying your cart.");
               throw new Error("Unexpected delete response.");
+            } else {
+              alert("Your cart was successfully emptied.");
+              location.reload();
             }
           });
         })
