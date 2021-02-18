@@ -67,10 +67,39 @@ export default class Category extends CatalogPage {
 
         $.get(`/cart.php?action=add&product_id=${productId}`, function (data) {
           if (index === arrElProducts.length - 1) {
+            alert(
+              "All of the items in this category page have been added to the cart."
+            );
             window.location = "/cart.php";
           }
+        }).fail(function () {
+          alert("There was an issue with loading your items to the cart.");
         });
       });
+    });
+
+    $("button#removeFromCart").on("click", () => {
+      fetch("/api/storefront/cart", {
+        credentials: "include",
+      })
+        .then((response) => response.json())
+        .then(function (arrCarts) {
+          const cartId = arrCarts[0].id;
+          fetch(`/api/storefront/cart/${cartId}`, {
+            method: "DELETE",
+            credentials: "include",
+          })
+            .then((response) => response.json())
+            .then((response) => {
+              console.log("Delete response", response);
+              if (!response) {
+                throw new Error("Unexpected delete response.");
+              }
+            });
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
     });
 
     this.ariaNotifyNoProducts();
